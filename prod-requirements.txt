@@ -1,0 +1,6 @@
+Django==4.2.6
+django-ckeditor==6.7.0
+django-storages==1.14.2
+django-taggit==4.0.0
+nodeenv==1.8.0
+Pillow==10.0.1
