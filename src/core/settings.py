@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'taggit',
     # Project apps
     'base',
+    'products',
 ]
 
 MIDDLEWARE = [
