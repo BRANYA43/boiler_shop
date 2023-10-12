@@ -1,6 +1,19 @@
 repos:
   - repo: local
     hooks:
+      - id: autoflake
+        name: autoflake
+        entry: autoflake
+        language: python
+        types: [ python ]
+        pass_filenames: true
+        args: [
+          '--in-place',
+          '--remove-all-unused-imports',
+          '--remove-unused-variables',
+          '--remove-duplicate-keys',
+        ]
+
       - id: black
         name: black
         entry: black
@@ -9,23 +22,9 @@ repos:
         pass_filenames: true
         args: [
           '--line-length=120',
-          '--exclude=venv',
+          '--exclude=venv,migrations',
           '--target-version=py311',
           '--skip-string-normalization',
-        ]
-
-
-      - id: autoflake
-        name: autoflake
-        entry: autoflake
-        language: python
-        types: [python]
-        pass_filenames: true
-        args: [
-          '--in-place',
-          '--remove-all-unused-imports',
-          '--remove-unused-variables',
-          '--remove-duplicate-keys',
         ]
 
       - id: flake8
@@ -36,7 +35,7 @@ repos:
         pass_filenames: true
         args: [
           '--max-line-length=120',
-          '--exclude=venv',
+          '--exclude=venv,migrations',
           '--max-complexity=8',
         ]
         additional_dependencies: [
