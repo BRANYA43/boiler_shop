@@ -27,6 +27,7 @@ class NameModelMixinTest(MixinTest):
         field: models.SlugField = self.test_model._meta.get_field('slug')
         self.assertTrue(isinstance(field, models.SlugField))
         self.assertEqual(field.max_length, 50)
+        self.assertTrue(field.unique)
 
     def test_get_absolute_url_method(self):
         with self.assertRaises(NotImplementedError):
