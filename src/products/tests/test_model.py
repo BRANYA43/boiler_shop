@@ -2,8 +2,13 @@ from base.models import DateModelMixin, NameModelMixin
 
 from django.db import models
 from django.test import TestCase
+from django.urls import reverse
 
 from products.models import Product
+
+
+def create_test_product() -> Product:
+    return Product.objects.create(name='name', slug='slug', price=9999)
 
 
 class ProductTest(TestCase):
@@ -15,3 +20,7 @@ class ProductTest(TestCase):
         field: models.DecimalField = Product._meta.get_field('price')
 
         self.assertIsInstance(field, models.DecimalField)
+
+    def test_get_absolute_url(self):
+        product = create_test_product()
+        self.assertEqual(product.get_absolute_url(), reverse('products:detail', args=[product.slug]))
