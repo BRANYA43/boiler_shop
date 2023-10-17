@@ -13,3 +13,6 @@ class Product(NameModelMixin, DateModelMixin):
 
     def get_absolute_url(self):
         return reverse_lazy('products:detail', args=[self.slug])
+
+    def __str__(self):
+        return f'{self.name}'
