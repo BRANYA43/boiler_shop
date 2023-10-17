@@ -1,2 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Product List{% endblock %}
+{% block content %}
+<div>
+    {% for product in product_list %}
+        <div class="card">
+            <a name="name_link" href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
+            <h3>Price: {{ product.price }} UAH</h3>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
