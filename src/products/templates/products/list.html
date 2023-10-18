@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Product List{% endblock %}
 {% block content %}
 <div>
     {% for product in product_list %}
         <div class="card">
+            <a name="image_link" href="{% url 'products:detail' product.slug %}">
+                {% if product.image != '' %}
+                    <img src="{{ product.image.url }}">
+                {% else %}
+                    <img src="{% static 'images/no_image.png' %}">
+                {% endif %}
+            </a>
             <a name="name_link" href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
             <h3>Price: {{ product.price }} UAH</h3>
         </div>

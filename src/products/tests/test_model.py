@@ -7,6 +7,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from ..models import Product
+from ..utils import get_upload_path
 
 
 def create_test_product() -> Product:
@@ -40,6 +41,13 @@ class ProductTest(TestCase):
         self.assertIsInstance(field, RichTextField)
         self.assertTrue(field.null)
         self.assertTrue(field.blank)
+
+    def test_image_field(self):
+        field: models.ImageField = get_field(Product, 'image')
+
+        self.assertIsInstance(field, models.ImageField)
+        self.assertTrue(field.null)
+        self.assertIs(field.upload_to, get_upload_path)
 
     def test_get_absolute_url(self):
         product = create_test_product()
