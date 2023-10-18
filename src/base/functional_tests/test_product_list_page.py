@@ -18,3 +18,14 @@ class ProductListPageTest(FunctionalTest):
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, self.live_server_url + product.get_absolute_url())
         )
+
+    def test_product_image_redirects_user_to_product_detail(self):
+        product = create_test_product()
+
+        self.browser.get(self.live_server_url + reverse('products:list'))
+        card = self.browser.find_element(By.CSS_SELECTOR, '.card')
+        card.find_element(By.NAME, 'image_link').click()
+
+        self.wait_for(
+            lambda: self.assertEqual(self.browser.current_url, self.live_server_url + product.get_absolute_url())
+        )
