@@ -10,8 +10,8 @@ from ..models import Product
 from ..utils import get_upload_path
 
 
-def create_test_product() -> Product:
-    return Product.objects.create(name='name', slug='slug', price=9999)
+def create_test_product(name='name', slug='slug', price=9999) -> Product:
+    return Product.objects.create(name=name, slug=slug, price=price)
 
 
 def get_field(model, field_name: str):
