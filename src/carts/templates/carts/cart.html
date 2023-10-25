@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Cart{% endblock %}
+{% block content %}
+<div>
+    {% for product in cart.cart.values %}
+        <h3>{{ product.name }}, Price: {{ product.price }}, Quantity: {{ product.quantity }}</h3>
+    {% empty %}
+        <h3>You added nothing here yet</h3>
+    {% endfor %}
+    <a name="make_order" href="{% url 'orders:create_order' %}">Make Order</a>
+</div>
+{% endblock %}
