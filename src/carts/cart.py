@@ -14,7 +14,7 @@ class Cart:
 
     def save(self):
         self._session['cart'] = self._cart
-        self._session.modified = True
+        self._session.save()
 
     def add(self, product: Product):
         self._cart[product.slug] = {

@@ -45,4 +45,4 @@ class CartTest(TestCase):
         product = create_test_product()
         cart.add(product)
 
-        self.assertIn(product.slug, self.request.session['cart'].keys())
+        self.assertIn(product.slug, self.client.session['cart'].keys())
