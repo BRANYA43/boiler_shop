@@ -20,7 +20,7 @@ class OrdersAndCartTest(FunctionalTest):
         card.find_element(By.NAME, 'buy').click()
 
         # - Button change its name on "Added to cart"
-        self.wait_for(lambda: self.assertIn('Added to cart', self.browser.find_element(By.TAG_NAME, 'button').text))
+        self.wait_for(lambda: self.assertIn('Added to cart', self.browser.find_element(By.NAME, 'added_to_cart').text))
 
         # User want to check his cart and see his product that have been added recently
         self.browser.get(self.live_server_url + reverse('carts:cart'))
@@ -53,6 +53,6 @@ class OrdersAndCartTest(FunctionalTest):
 
         self.wait_for(
             lambda: self.assertEqual(
-                self.browser.current_url, self.live_server_url + reverse('orders:successful_order')
+                self.browser.current_url, self.live_server_url + reverse('orders:make_order_success_message')
             )
         )
