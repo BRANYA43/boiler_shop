@@ -15,7 +15,7 @@ def create_test_product(name='name', slug='slug', price=9999) -> Product:
 
 
 class ProductTest(ModelTest):
-    def test_product_inherit_needed_model_mixin(self):
+    def test_product_inherits_necessary_mixins(self):
         self.assertTrue(issubclass(Product, NameModelMixin))
         self.assertTrue(issubclass(Product, DateModelMixin))
 

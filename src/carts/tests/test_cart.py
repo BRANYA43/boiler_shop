@@ -31,7 +31,7 @@ class CartTest(TestCase):
         cart._cart = {'test': 1}
         cart.save()
 
-        self.assertEqual(cart.cart, self.request.session['cart'])
+        self.assertEqual(cart.cart, self.client.session['cart'])
 
     def test_add_product_to_cart(self):
         cart = Cart(self.request)

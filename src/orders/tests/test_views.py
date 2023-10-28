@@ -83,6 +83,6 @@ class MakeOrderViewTest(TestCase):
 
         self.assertEqual(2, OrderProduct.objects.count())
 
-    def test_view_redirect_to_success_message_if_form_is_valid_POST(self):
+    def test_view_redirects_to_success_message_if_form_is_valid_POST(self):
         response = self.client.post(self.url, data=self.post_data)
         self.assertRedirects(response, reverse('orders:make_order_success_message'))

@@ -32,7 +32,7 @@ def create_test_order_product(order: Order, product: Product, name=None, price=N
 
 
 class OrderModelTest(ModelTest):
-    def test_model_inherit_necessary_mixin(self):
+    def test_model_inherits_necessary_mixins(self):
         self.assertTrue(issubclass(Order, DateModelMixin))
 
     def test_model_has_uuid_field(self):
@@ -76,7 +76,7 @@ class OrderProductModelTest(ModelTest):
 
 
 class CustomerModelTest(ModelTest):
-    def test_model_inherit_necessary_mixin(self):
+    def test_model_inherits_necessary_mixins(self):
         self.assertTrue(issubclass(Customer, DateModelMixin))
 
     def test_model_has_first_name_field(self):

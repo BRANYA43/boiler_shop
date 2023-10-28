@@ -9,7 +9,7 @@ class CustomerFormTest(TestCase):
     def setUp(self) -> None:
         self.data = {'first_name': 'First name', 'last_name': 'Last name', 'phone': '0505555555'}
 
-    def test_form_changes_phone_for_correct_format_by_pattern(self):
+    def test_form_changes_phone_by_pattern_for_correct_format(self):
         form = CustomerForm(data={'phone': '0505555555'})
         form.is_valid()
         self.assertEqual(form.cleaned_data['phone'], '38(050) 555 55-55')

@@ -21,7 +21,7 @@ class RenameImageFilenameTest(TestCase):
 
         self.assertIsNone(self.product.image.name)
 
-    def test_signal_rename_filename_if_slug_is_changed(self):
+    def test_signal_renames_filename_if_slug_is_changed(self):
         self.product.image = self.image
         self.product.save()
 
