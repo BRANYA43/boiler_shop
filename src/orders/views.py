@@ -1,7 +1,8 @@
 from carts.cart import Cart
 
-from django.http import HttpRequest
-from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import FormView
+
 
 from orders.forms import CustomerForm
 from orders.models import Customer, Order, OrderProduct
@@ -9,36 +10,31 @@ from orders.models import Customer, Order, OrderProduct
 from products.models import Product
 
 
-def make_order_view(request: HttpRequest):
-    cart = Cart(request)
-    if request.method == 'GET':
-        form = CustomerForm()
-        return render(request, 'orders/make_order.html', {'form': form, 'cart': cart})
-    elif request.method == 'POST':
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            _form_is_valid(request, cart, form)
-            return redirect('orders:make_order_success_message')
-        else:
-            return render(request, 'orders/make_order.html', {'form': form, 'cart': cart})
+class MakeOrderView(FormView):
+    form_class = CustomerForm
+    template_name = 'orders/make_order.html'
+    success_url = reverse_lazy('orders:make_order_success_message')
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.cart = Cart(self.request)
 
-def _form_is_valid(request: HttpRequest, cart: Cart, form: CustomerForm):
-    customer = form.save()
-    _set_session_customer_pk(request, customer)
-    order = Order.objects.create(customer=customer)
-    _create_order_products(order, cart)
+    def get_context_data(self, **kwargs):
+        self.extra_context = {'cart': self.cart}
+        return super().get_context_data(**kwargs)
 
+    def form_valid(self, form):
+        customer = form.save()
+        self._set_customer(customer)
+        order = Order.objects.create(customer=customer)
+        self._create_order_products(order)
+        return super().form_valid(form)
 
-def _create_order_products(order: Order, cart: Cart):
-    for slug, data in cart.cart.items():
-        product = Product.objects.get(slug=slug)
-        OrderProduct.objects.create(
-            order=order, product=product, name=data['name'], price=data['price'], quantity=data['quantity']
-        )
+    def _set_customer(self, customer: Customer):
+        self.request.session['customer'] = customer.pk
+        self.request.session.save()
 
-
-def _set_session_customer_pk(request: HttpRequest, customer: Customer):
-    session = request.session
-    session['customer_id'] = customer.pk
-    session.modified = True
+    def _create_order_products(self, order):
+        for slug, data in self.cart.cart.items():
+            product = Product.objects.get(slug=slug)
+            OrderProduct.objects.create(order=order, product=product, **data)

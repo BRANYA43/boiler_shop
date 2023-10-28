@@ -6,7 +6,7 @@ from . import views
 app_name = 'orders'
 
 urlpatterns = [
-    path('make_order/', views.make_order_view, name='make_order'),
+    path('make_order/', views.MakeOrderView.as_view(), name='make_order'),
     path(
         'make_order_success_message/',
         TemplateView.as_view(template_name='orders/make_order_success_message.html'),

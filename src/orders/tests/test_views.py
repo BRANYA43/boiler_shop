@@ -3,9 +3,11 @@ from carts.cart import Cart
 from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import reverse
+from django.views.generic import FormView
 
 from orders.forms import CustomerForm
 from orders.models import Customer, Order, OrderProduct
+from orders.views import MakeOrderView
 
 from products.tests.test_model import create_test_product
 
@@ -28,6 +30,9 @@ class MakeOrderViewTest(TestCase):
     def setUp(self) -> None:
         self.post_data = {'first_name': 'First name', 'last_name': 'Last name', 'phone': '0505555555'}
         self.url = reverse('orders:make_order')
+
+    def test_view_inherits_necessary_generics(self):
+        self.assertTrue(issubclass(MakeOrderView, FormView))
 
     def test_view_uses_correct_template_GET(self):
         response = self.client.get(self.url)
@@ -61,7 +66,7 @@ class MakeOrderViewTest(TestCase):
         self.client.post(self.url, data=self.post_data)
         customer = Customer.objects.first()
 
-        self.assertEqual(self.client.session['customer_id'], customer.pk)
+        self.assertEqual(self.client.session['customer'], customer.pk)
 
     def test_view_creates_new_order_POST(self):
         self.assertEqual(0, Order.objects.count())
