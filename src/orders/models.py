@@ -21,6 +21,10 @@ class Customer(DateModelMixin):
     last_name = models.CharField(max_length=50)
     phone = PhoneField()
 
+    @property
+    def full_name(self) -> str:
+        return f'{self.first_name} {self.last_name}'
+
 
 class Order(DateModelMixin):
     uuid = models.UUIDField(default=uuid4)

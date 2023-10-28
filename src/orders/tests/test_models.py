@@ -95,3 +95,7 @@ class CustomerModelTest(ModelTest):
         field: PhoneField = self.get_field(Customer, 'phone')
 
         self.assertIsInstance(field, PhoneField)
+
+    def test_full_name_returns_correct_full_name(self):
+        customer = create_test_customer()
+        self.assertEqual(customer.full_name, f'{customer.first_name} {customer.last_name}')
