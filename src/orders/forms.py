@@ -13,6 +13,9 @@ class CustomerForm(forms.ModelForm):
 
     def clean_phone(self):
         data = self.cleaned_data['phone']
+        if re.search(r'^38\(\d{3}\) \d{3} \d{2}-\d{2}$', data):
+            return data
+
         data = ''.join(re.findall(r'\d+', data))
         if data.startswith('38'):
             return f'38({data[2:5]}) {data[5:8]} {data[8:10]}-{data[10:12]}'
