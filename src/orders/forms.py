@@ -19,6 +19,6 @@ class CustomerForm(forms.ModelForm):
         return f'38({data[:3]}) {data[3:6]} {data[6:8]}-{data[8:10]}'
 
     def save(self, commit=True):
-        if Customer.objects.filter(phone=self.cleaned_data['phone']):
-            return Customer.objects.get(phone=self.cleaned_data['phone'])
+        if qs := Customer.objects.filter(phone=self.cleaned_data['phone']):
+            return qs[0]
         return super().save(commit=commit)
