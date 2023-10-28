@@ -10,7 +10,7 @@ from products.models import Product
 from ..models import Customer, Order, OrderProduct, PhoneField
 
 
-def create_test_customer(first_name='First name', last_name='Last name', phone='38(050) 555 55-55') -> Customer:
+def create_test_customer(first_name='First name', last_name='Last name', phone='(050) 555 55-55') -> Customer:
     return Customer.objects.create(first_name=first_name, last_name=last_name, phone=phone)
 
 

@@ -14,16 +14,16 @@ class CustomerFormTest(TestCase):
     def test_form_changes_phone_by_pattern_for_correct_format(self):
         form = CustomerForm(data={'phone': '0505555555'})
         form.is_valid()
-        self.assertEqual(form.cleaned_data['phone'], '38(050) 555 55-55')
+        self.assertEqual(form.cleaned_data['phone'], '(050) 555 55-55')
 
     @patch('orders.forms.re')
     def test_clean_phone_returns_phone_if_it_is_correct_format(self, mock_re: MagicMock):
-        form = CustomerForm(data={'phone': '38(050) 555 55-55'})
+        form = CustomerForm(data={'phone': '(050) 555 55-55'})
         form.is_valid()
 
-        mock_re.search.assert_called_once()
+        mock_re.match.assert_called_once()
         mock_re.findall.assert_not_called()
-        self.assertEqual(form.cleaned_data['phone'], '38(050) 555 55-55')
+        self.assertEqual(form.cleaned_data['phone'], '(050) 555 55-55')
 
     def test_form_save_returns_new_customer(self):
         form = CustomerForm(data=self.data)

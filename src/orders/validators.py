@@ -8,5 +8,5 @@ def validate_phone(value):
     if len(result) != 10 and len(result) != 12:
         raise ValidationError('Phone number must have 10 or 12 digits')
 
-    if re.search(r'[^\d\s\-()]', value):
+    if re.search(r'[^\d\s\-()+]', value):
         raise ValidationError('Phone number can only contain digits, parentheses, space and hyphen')
