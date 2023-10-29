@@ -25,15 +25,13 @@ class OrdersAndCartTest(FunctionalTest):
         # User want to check his cart and see his product that have been added recently
         self.browser.get(self.live_server_url + reverse('carts:cart'))
 
-        self.wait_for(lambda: self.assertEqual(self.browser.current_url, self.live_server_url + reverse('carts:cart')))
+        self.wait_for_check_current_url(reverse('carts:cart'))
         self.assertIn(product.name, self.browser.find_element(By.TAG_NAME, 'h3').text)
 
         # User want to continue order, so click on button "Make the Order"
         self.browser.find_element(By.NAME, 'make_order').click()
 
-        self.wait_for(
-            lambda: self.assertEqual(self.browser.current_url, self.live_server_url + reverse('orders:make_order'))
-        )
+        self.wait_for_check_current_url(reverse('orders:make_order'))
 
         # User fill customer form
         first_name = self.browser.find_element(By.NAME, 'first_name')
@@ -51,8 +49,4 @@ class OrdersAndCartTest(FunctionalTest):
         # User click on button "Make the Order" and see message page about successful made the order
         self.browser.find_element(By.NAME, 'make_order').click()
 
-        self.wait_for(
-            lambda: self.assertEqual(
-                self.browser.current_url, self.live_server_url + reverse('orders:make_order_success_message')
-            )
-        )
+        self.wait_for_check_current_url(reverse('orders:make_order_success_message'))
