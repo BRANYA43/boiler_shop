@@ -15,7 +15,7 @@ class CartAddTest(TestCase):
 
     def test_view_adds_product_to_cart(self):
         self.client.post(self.url)
-        self.assertIn(self.product.slug, self.client.session['cart'].keys())
+        self.assertIn(self.product.slug, self.client.session['cart']['products'])
 
 
 class CartViewTest(TestCase):

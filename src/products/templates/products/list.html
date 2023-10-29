@@ -14,7 +14,7 @@
             </a>
             <a name="name_link" href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
             <h3>Price: {{ product.price }} UAH</h3>
-                {% if product.slug in request.session.cart.keys %}
+                {% if product.slug in request.session.cart.products %}
                     <a name="added_to_cart" href="#">Added to cart</a>
                 {% else %}
                     <a name="buy" href="{% url 'carts:cart_add' product.slug %}">Buy</a>

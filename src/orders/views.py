@@ -7,8 +7,6 @@ from django.views.generic import FormView
 from orders.forms import CustomerForm
 from orders.models import Customer, Order, OrderProduct
 
-from products.models import Product
-
 
 class MakeOrderView(FormView):
     form_class = CustomerForm
@@ -36,6 +34,11 @@ class MakeOrderView(FormView):
         session.save()
 
     def _create_order_products(self, order):
-        for slug, data in self.cart.cart.items():
-            product = Product.objects.get(slug=slug)
-            OrderProduct.objects.create(order=order, product=product, **data)
+        for product, quantity in self.cart:
+            OrderProduct.objects.create(
+                order=order,
+                product=product,
+                name=product.name,
+                price=product.price,
+                quantity=quantity,
+            )

@@ -2,8 +2,8 @@
 {% block title %}Cart{% endblock %}
 {% block content %}
 <div>
-    {% for product in cart.cart.values %}
-        <h3>{{ product.name }}, Price: {{ product.price }}, Quantity: {{ product.quantity }}</h3>
+    {% for product, quantity in cart %}
+        <h3>{{ product.name }}, Price: {{ product.price }}, Quantity: {{ quantity }}</h3>
     {% empty %}
         <h3>You added nothing here yet</h3>
     {% endfor %}
