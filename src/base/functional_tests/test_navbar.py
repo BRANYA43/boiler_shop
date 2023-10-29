@@ -25,3 +25,9 @@ class NavbarTest(FunctionalTest):
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, self.live_server_url + reverse('products:list'))
         )
+
+    def test_navbar_item_of_cart_redirects_to_cart_page(self):
+        self.browser.get(self.live_server_url)
+        self.browser.find_element(By.NAME, 'cart').click()
+
+        self.wait_for(lambda: self.assertEqual(self.browser.current_url, self.live_server_url + reverse('')))

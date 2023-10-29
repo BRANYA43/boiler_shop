@@ -41,3 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     @wait
     def wait_for(self, fn: Callable):
         return fn()
+
+    @wait
+    def wait_for_check_current_url(self, expected_url):
+        self.assertEqual(self.browser.current_url, self.live_server_url + expected_url)
