@@ -26,6 +26,7 @@ class MakeOrderView(FormView):
         self._set_customer(customer)
         order = Order.objects.create(customer=customer)
         self._create_order_products(order)
+        self.cart.clear()
         return super().form_valid(form)
 
     def _set_customer(self, customer: Customer):

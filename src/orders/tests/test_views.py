@@ -91,3 +91,13 @@ class MakeOrderViewTest(TestCase):
     def test_view_redirects_to_success_message_if_form_is_valid_POST(self):
         response = self.client.post(self.url, data=self.post_data)
         self.assertRedirects(response, reverse('orders:make_order_success_message'))
+
+    def test_after_make_order_cart_is_clear(self):
+        request = HttpRequest()
+        request.session = self.client.session
+        cart = Cart(request)
+        cart.add(create_test_product())
+
+        self.client.post(self.url, data=self.post_data)
+
+        self.assertFalse(self.client.session['cart']['products'])
