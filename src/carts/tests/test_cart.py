@@ -1,6 +1,8 @@
 from django.http import HttpRequest
 from django.test import TestCase
 
+from orders.tests.test_models import create_test_customer
+
 from products.models import Product
 from products.tests.test_model import create_test_product
 
@@ -23,7 +25,7 @@ class CartTest(TestCase):
         self.assertEqual(cart, self.client.session['cart'])
 
     def test_init_cart_with_existing_cart_in_session(self):
-        cart_data = {'products': {'slug': {}}}
+        cart_data = {'products': {'slug': 1}, 'customer': None}
         self.request.session['cart'] = cart_data
         cart = Cart(self.request)
 
@@ -46,13 +48,6 @@ class CartTest(TestCase):
             self.assertEqual(product.price, new_product.price)
             self.assertEqual(quantity, 1)
 
-    def test_save_cart_data_to_session(self):
-        cart = Cart(self.request)
-        cart._products = {'slug': {}}
-        cart.save()
-
-        self.assertEqual(cart, self.client.session['cart'])
-
     def test_add_product_to_cart(self):
         cart = Cart(self.request)
         product = create_test_product()
@@ -67,3 +62,17 @@ class CartTest(TestCase):
 
         self.assertIn(product.slug, self.client.session['cart']['products'])
         self.assertEqual(1, self.client.session['cart']['products'][product.slug])
+
+    def test_set_customer_for_cart(self):
+        customer = create_test_customer()
+        cart = Cart(self.request)
+        cart.customer = customer
+
+        self.assertEqual(cart.customer, customer)
+
+    def test_set_customer_result_save_to_session(self):
+        customer = create_test_customer()
+        cart = Cart(self.request)
+        cart.customer = customer
+
+        self.assertEqual(customer.pk, self.client.session['cart']['customer'])

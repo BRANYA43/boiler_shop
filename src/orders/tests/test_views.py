@@ -66,7 +66,7 @@ class MakeOrderViewTest(TestCase):
         self.client.post(self.url, data=self.post_data)
         customer = Customer.objects.first()
 
-        self.assertEqual(self.client.session['customer'], customer.pk)
+        self.assertEqual(self.client.session['cart']['customer'], customer.pk)
 
     def test_view_creates_new_order_POST(self):
         self.assertEqual(0, Order.objects.count())

@@ -29,9 +29,7 @@ class MakeOrderView(FormView):
         return super().form_valid(form)
 
     def _set_customer(self, customer: Customer):
-        session = self.request.session
-        session['customer'] = customer.pk
-        session.save()
+        self.cart.customer = customer
 
     def _create_order_products(self, order):
         for product, quantity in self.cart:
