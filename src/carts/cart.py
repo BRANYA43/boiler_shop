@@ -18,6 +18,9 @@ class Cart:
         else:
             self._products = {}
 
+    def _get_cart(self):
+        return {'products': self._products, 'customer': self._customer}
+
     @property
     def products(self) -> dict:
         return self._products.copy()
@@ -33,14 +36,17 @@ class Cart:
         self.save()
 
     def __eq__(self, other):
-        return {'products': self._products, 'customer': self._customer} == other
+        return self._get_cart() == other
 
     def __iter__(self):
         for slug, quantity in self._products.items():
             yield Product.objects.get(slug=slug), quantity
 
+    def __str__(self):
+        return str(self._get_cart())
+
     def save(self):
-        self._session['cart'] = {'products': self._products, 'customer': self._customer}
+        self._session['cart'] = self._get_cart()
         self._session.save()
 
     def add(self, product: Product):
