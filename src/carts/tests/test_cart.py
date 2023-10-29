@@ -76,3 +76,13 @@ class CartTest(TestCase):
         cart.customer = customer
 
         self.assertEqual(customer.pk, self.client.session['cart']['customer'])
+
+    def test_clear_cart(self):
+        cart = Cart(self.request)
+        cart.add(create_test_product())
+
+        self.assertIsNotNone(cart.products)
+
+        cart.clear()
+
+        self.assertFalse(cart.products)
