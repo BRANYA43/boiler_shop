@@ -14,11 +14,11 @@ from products.tests.test_model import create_test_product
 
 class MakeOrderSuccessMessageView(TestCase):
     def setUp(self) -> None:
-        self.url = reverse('orders:make_order_success_message')
+        self.url = reverse('orders:success_making_order')
 
     def test_view_uses_correct_template(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'orders/make_order_success_message.html')
+        self.assertTemplateUsed(response, 'orders/success_making_order.html')
 
     def test_view_contains_message(self):
         message = "Thank you for your order. We'll phone you soon for information clarification."
@@ -90,7 +90,7 @@ class MakeOrderViewTest(TestCase):
 
     def test_view_redirects_to_success_message_if_form_is_valid_POST(self):
         response = self.client.post(self.url, data=self.post_data)
-        self.assertRedirects(response, reverse('orders:make_order_success_message'))
+        self.assertRedirects(response, reverse('orders:success_making_order'))
 
     def test_after_make_order_cart_is_clear(self):
         request = HttpRequest()

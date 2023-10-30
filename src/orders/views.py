@@ -11,7 +11,7 @@ from orders.models import Customer, Order, OrderProduct
 class MakeOrderView(FormView):
     form_class = CustomerForm
     template_name = 'orders/make_order.html'
-    success_url = reverse_lazy('orders:make_order_success_message')
+    success_url = reverse_lazy('orders:success_making_order')
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
