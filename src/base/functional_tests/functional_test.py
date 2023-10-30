@@ -5,6 +5,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
 
 from webdriver_manager import firefox
 
@@ -45,3 +46,8 @@ class FunctionalTest(StaticLiveServerTestCase):
     @wait
     def wait_for_check_current_url(self, expected_url):
         self.assertEqual(self.browser.current_url, self.live_server_url + expected_url)
+
+    def go_to_page_by_navbar(self, name_page: str, url_for_check: str):
+        navbar = self.browser.find_element(By.TAG_NAME, 'nav')
+        navbar.find_element(By.NAME, name_page).click()
+        self.wait_for_check_current_url(url_for_check)
