@@ -18,14 +18,7 @@ class TestUserWorkWithCart(FunctionalTest):
         self.go_to_page_by_navbar('product_list', reverse('products:list'))
 
         # User chooses product and click on Buy
-        product_list = self.browser.find_element(By.ID, 'id_product_list')
-        card = product_list.find_element(By.CLASS_NAME, 'card')
-        card.find_element(By.NAME, 'buy').click()
-        # # Button change its name to Added to cart
-        self.wait_for_check_current_url(reverse('products:list'))
-        product_list = self.browser.find_element(By.ID, 'id_product_list')
-        card = product_list.find_element(By.CLASS_NAME, 'card')
-        card.find_element(By.NAME, 'added_to_cart')
+        self.buy_product_through_product_list()
 
         # User goes to cart to check if chosen product is there
         self.go_to_page_by_navbar('cart', reverse('carts:cart'))
@@ -67,9 +60,7 @@ class TestUserWorkWithCart(FunctionalTest):
         self.go_to_page_by_navbar('product_list', reverse('products:list'))
 
         # User chooses product and click on Buy
-        product_list = self.browser.find_element(By.ID, 'id_product_list')
-        card = product_list.find_element(By.CLASS_NAME, 'card')
-        card.find_element(By.NAME, 'buy').click()
+        self.buy_product_through_product_list()
 
         # User goes to cart to remove product from cart
         self.go_to_page_by_navbar('cart', reverse('carts:cart'))
@@ -93,15 +84,8 @@ class TestUserWorkWithCart(FunctionalTest):
         self.go_to_page_by_navbar('product_list', reverse('products:list'))
 
         # User chooses products and click on Buy
-        product_list = self.browser.find_element(By.ID, 'id_product_list')
-        cards = product_list.find_elements(By.CLASS_NAME, 'card')
-        cards[0].find_element(By.NAME, 'buy').click()
-        self.wait_for_check_current_url(reverse('products:list'))
-
-        product_list = self.browser.find_element(By.ID, 'id_product_list')
-        cards = product_list.find_elements(By.CLASS_NAME, 'card')
-        cards[1].find_element(By.NAME, 'buy').click()
-        self.wait_for_check_current_url(reverse('products:list'))
+        self.buy_product_through_product_list()
+        self.buy_product_through_product_list(1)
 
         # User goes to cart to clear
         self.go_to_page_by_navbar('cart', reverse('carts:cart'))
