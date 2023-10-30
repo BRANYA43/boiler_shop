@@ -7,6 +7,12 @@ from products.models import Product
 from .cart import Cart
 
 
+def cart_clear(request: HttpRequest):
+    cart = Cart(request)
+    cart.clear()
+    return redirect('carts:cart')
+
+
 def cart_remove(request: HttpRequest, slug: str):
     product = Product.objects.get(slug=slug)
     cart = Cart(request)

@@ -8,6 +8,9 @@
     {% empty %}
         <h3>You added nothing here yet</h3>
     {% endfor %}
+    {% if cart.products %}
+        <a name="clear" href="{% url 'carts:cart_clear'%}">Clear</a>
+    {% endif %}
     <a name="make_order" href="{% url 'orders:make_order' %}">Make Order</a>
 </div>
 {% endblock %}

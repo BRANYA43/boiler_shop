@@ -81,3 +81,36 @@ class TestUserWorkWithCart(FunctionalTest):
         self.wait_for_check_current_url(reverse('carts:cart'))
         cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
         self.assertNotIn(product.name, cart_product_list.text)
+
+    def test_user_can_clear_cart(self):
+        product_1 = create_test_product(name='name_1', slug='slug_1')
+        product_2 = create_test_product(name='name_2', slug='slug_2')
+
+        # User enters to site
+        self.browser.get(self.live_server_url)
+
+        # User goes to products page
+        self.go_to_page_by_navbar('product_list', reverse('products:list'))
+
+        # User chooses products and click on Buy
+        product_list = self.browser.find_element(By.ID, 'id_product_list')
+        cards = product_list.find_elements(By.CLASS_NAME, 'card')
+        cards[0].find_element(By.NAME, 'buy').click()
+        self.wait_for_check_current_url(reverse('products:list'))
+
+        product_list = self.browser.find_element(By.ID, 'id_product_list')
+        cards = product_list.find_elements(By.CLASS_NAME, 'card')
+        cards[1].find_element(By.NAME, 'buy').click()
+        self.wait_for_check_current_url(reverse('products:list'))
+
+        # User goes to cart to clear
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        self.assertIn(product_1.name, cart_product_list.text)
+        self.assertIn(product_2.name, cart_product_list.text)
+        cart_product_list.find_element(By.NAME, 'clear').click()
+
+        # User check cart is clear
+        self.wait_for_check_current_url(reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        self.assertIn('You added nothing here yet', cart_product_list.text)
