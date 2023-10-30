@@ -86,3 +86,15 @@ class CartTest(TestCase):
         cart.clear()
 
         self.assertFalse(cart.products)
+
+    def test_remove_products(self):
+        product_to_remove = create_test_product(name='to remove name', slug='to_remove_slug')
+        product_to_not_remove = create_test_product(name='to not remove name', slug='to_not_remove_slug')
+        cart = Cart(self.request)
+        cart.add(product_to_remove)
+        cart.add(product_to_not_remove)
+
+        cart.remove(product_to_remove)
+
+        self.assertIn(product_to_not_remove.slug, cart.products)
+        self.assertNotIn(product_to_remove.slug, cart.products)

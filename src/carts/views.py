@@ -7,6 +7,13 @@ from products.models import Product
 from .cart import Cart
 
 
+def cart_remove(request: HttpRequest, slug: str):
+    product = Product.objects.get(slug=slug)
+    cart = Cart(request)
+    cart.remove(product)
+    return redirect('carts:cart')
+
+
 @require_POST
 def cart_add(request: HttpRequest, slug: str):
     product = Product.objects.get(slug=slug)

@@ -53,6 +53,10 @@ class Cart:
         self._products[product.slug] = 1
         self.save()
 
+    def remove(self, product: Product):
+        del self._products[product.slug]
+        self.save()
+
     def clear(self):
         self._products.clear()
         self.save()

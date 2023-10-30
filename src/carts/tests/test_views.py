@@ -4,6 +4,24 @@ from django.urls import reverse
 from products.tests.test_model import create_test_product
 
 
+class CartRemoveTest(TestCase):
+    def setUp(self) -> None:
+        self.product = create_test_product()
+        session = self.client.session
+        session['cart'] = {'products': {self.product.slug: 1}}
+        session.save()
+        self.url = reverse('carts:cart_remove', args=[self.product.slug])
+
+    def test_view_redirects_to_cart(self):
+        response = self.client.get(self.url)
+        self.assertRedirects(response, reverse('carts:cart'))
+
+    def test_view_removes_product_from_cart(self):
+        self.client.get(self.url)
+
+        self.assertNotIn(self.product.slug, self.client.session['cart']['products'])
+
+
 class CartAddTest(TestCase):
     def setUp(self) -> None:
         self.product = create_test_product()

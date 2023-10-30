@@ -3,7 +3,8 @@
 {% block content %}
 <div id="id_product_list">
     {% for product, quantity in cart %}
-        <h3>{{ product.name }}, Price: {{ product.price }}, Quantity: {{ quantity }}</h3>
+        <h3>{{ product.name }}, Price: {{ product.price }}, Quantity: {{ quantity }} </h3>
+        <a name="remove" href="{% url 'carts:cart_remove' product.slug %}">X</a>
     {% empty %}
         <h3>You added nothing here yet</h3>
     {% endfor %}

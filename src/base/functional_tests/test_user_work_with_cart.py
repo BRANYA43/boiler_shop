@@ -56,3 +56,28 @@ class TestUserWorkWithCart(FunctionalTest):
         self.go_to_page_by_navbar('cart', reverse('carts:cart'))
         cart_product_list = self.browser.find_element(By.ID, 'id_product_list').text
         self.assertIn(product.name, cart_product_list)
+
+    def test_user_can_remove_product_from_cart(self):
+        product = create_test_product()
+
+        # User enters to site
+        self.browser.get(self.live_server_url)
+
+        # User goes to products page
+        self.go_to_page_by_navbar('product_list', reverse('products:list'))
+
+        # User chooses product and click on Buy
+        product_list = self.browser.find_element(By.ID, 'id_product_list')
+        card = product_list.find_element(By.CLASS_NAME, 'card')
+        card.find_element(By.NAME, 'buy').click()
+
+        # User goes to cart to remove product from cart
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        self.assertIn(product.name, cart_product_list.text)
+        cart_product_list.find_element(By.NAME, 'remove').click()
+
+        # User check product is removed
+        self.wait_for_check_current_url(reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        self.assertNotIn(product.name, cart_product_list.text)
