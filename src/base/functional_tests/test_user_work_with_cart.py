@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from products.tests.test_model import create_test_product
 
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 
@@ -98,3 +99,33 @@ class TestUserWorkWithCart(FunctionalTest):
         self.wait_for_check_current_url(reverse('carts:cart'))
         cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
         self.assertIn('You added nothing here yet', cart_product_list.text)
+
+    def test_user_can_set_new_quantity(self):
+        create_test_product()
+
+        # User enters to site
+        self.browser.get(self.live_server_url)
+
+        # User goes to products page
+        self.go_to_page_by_navbar('product_list', reverse('products:list'))
+
+        # User chooses products and click on Buy
+        self.buy_product_through_product_list()
+
+        # User goes to cart to set new quantity
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        quantity_input = cart_product_list.find_element(By.NAME, 'quantity')
+        quantity_input.clear()
+        quantity_input.send_keys(100)
+        quantity_input.send_keys(Keys.ENTER)
+
+        self.wait_for_check_current_url(reverse('carts:cart'))
+
+        # User reloads cart page
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+
+        # User sees new quantity that is 100
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list')
+        quantity_input = cart_product_list.find_element(By.NAME, 'quantity')
+        self.assertEqual(100, int(quantity_input.get_attribute('value')))
