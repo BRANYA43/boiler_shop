@@ -4,6 +4,24 @@ from django.urls import reverse
 from products.tests.test_model import create_test_product
 
 
+class CartSetQuantity(TestCase):
+    def setUp(self) -> None:
+        self.product = create_test_product()
+        session = self.client.session
+        session['cart'] = {'products': {self.product.slug: 1}}
+        session.save()
+        self.url = reverse('carts:cart_set_quantity', args=[self.product.slug])
+        self.post_data = {'quantity': 100}
+
+    def test_view_redirects_to_cart(self):
+        response = self.client.post(self.url, data=self.post_data)
+        self.assertRedirects(response, reverse('carts:cart'))
+
+    def test_view_set_new_quantity(self):
+        self.client.post(self.url, data=self.post_data)
+        self.assertEqual(100, self.client.session['cart']['products'][self.product.slug])
+
+
 class CartClearTest(TestCase):
     def setUp(self) -> None:
         self.product_1 = create_test_product(name='product_1', slug='slug_1')

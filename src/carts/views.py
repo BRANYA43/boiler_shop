@@ -7,6 +7,13 @@ from products.models import Product
 from .cart import Cart
 
 
+def cart_set_quantity(request: HttpRequest, slug: str):
+    product = Product.objects.get(slug=slug)
+    cart = Cart(request)
+    cart.set_quantity(product, int(request.POST['quantity']))
+    return redirect('carts:cart')
+
+
 def cart_clear(request: HttpRequest):
     cart = Cart(request)
     cart.clear()
