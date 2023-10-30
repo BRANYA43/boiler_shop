@@ -53,6 +53,10 @@ class Cart:
         self._products[product.slug] = 1
         self.save()
 
+    def set_quantity(self, product: Product, quantity: int):
+        self._products[product.slug] = quantity
+        self.save()
+
     def remove(self, product: Product):
         del self._products[product.slug]
         self.save()

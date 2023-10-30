@@ -98,3 +98,15 @@ class CartTest(TestCase):
 
         self.assertIn(product_to_not_remove.slug, cart.products)
         self.assertNotIn(product_to_remove.slug, cart.products)
+
+    def test_set_quantity(self):
+        product = create_test_product()
+
+        cart = Cart(self.request)
+        cart.add(product)
+
+        self.assertEqual(1, cart.products[product.slug])
+
+        cart.set_quantity(product, 100)
+
+        self.assertEqual(100, cart.products[product.slug])
