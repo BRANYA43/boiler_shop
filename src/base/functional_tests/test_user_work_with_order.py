@@ -8,30 +8,26 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 
-class OrdersAndCartTest(FunctionalTest):
-    def test_user_can_order_a_product_form_products_list(self):
+class UserWorkWithOrderTest(FunctionalTest):
+    def test_user_can_order_product_form_product_list(self):
         product = create_test_product()
 
-        # User go to product list page
+        # Use enters to site
         self.browser.get(self.live_server_url)
-        self.browser.find_element(By.NAME, 'product_list').click()
-        self.wait_for_check_current_url(reverse('products:list'))
 
-        # User choose product to buy and click on button "Buy", product is added to cart.
-        card = self.browser.find_element(By.CSS_SELECTOR, '.card')
-        card.find_element(By.NAME, 'buy').click()
+        # User goes to products page
+        self.go_to_page_by_navbar('product_list', reverse('products:list'))
 
-        # - Button change its name on "Added to cart"
-        self.wait_for(lambda: self.browser.find_element(By.NAME, 'added_to_cart'))
+        # User chooses product and click on Buy
+        self.buy_product_through_product_list()
 
-        # User want to check his cart and see his product that have been added recently
-        self.browser.find_element(By.NAME, 'cart').click()
-        self.wait_for_check_current_url(reverse('carts:cart'))
-        self.assertIn(product.name, self.browser.find_element(By.TAG_NAME, 'h3').text)
+        # User goes to cart to check if chosen product is there
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list').text
+        self.assertIn(product.name, cart_product_list)
 
-        # User want to continue order, so click on button "Make the Order"
+        # User click on Make Order
         self.browser.find_element(By.NAME, 'make_order').click()
-
         self.wait_for_check_current_url(reverse('orders:make_order'))
 
         # User fill customer form
@@ -53,26 +49,33 @@ class OrdersAndCartTest(FunctionalTest):
         # Site show message about success making order
         self.wait_for_check_current_url(reverse('orders:success_making_order'))
 
-    def test_user_can_order_a_product_form_product_detail(self):
+    def test_user_can_order_product_from_product_detail(self):
         product = create_test_product()
 
-        # User go to detail of chosen product
-        self.browser.get(self.live_server_url + product.get_absolute_url())
-        self.wait_for_check_current_url(product.get_absolute_url())
+        # Use enters to site
+        self.browser.get(self.live_server_url)
+
+        # User goes to products page
+        self.go_to_page_by_navbar('product_list', reverse('products:list'))
+
+        # User chooses product and click on its name for see its detail
+        product_list = self.browser.find_element(By.ID, 'id_product_list')
+        card = product_list.find_element(By.CLASS_NAME, 'card')
+        card.find_element(By.LINK_TEXT, product.name).click()
 
         # User click on Buy
+        self.wait_for_check_current_url(product.get_absolute_url())
         self.browser.find_element(By.NAME, 'buy').click()
-        # - Button change name to Added to cart
-        self.wait_for(lambda: self.browser.find_element(By.NAME, 'added_to_cart'))
+        # # Button change its name to Added to cart
+        self.wait_for_check_current_url(product.get_absolute_url())
+        self.browser.find_element(By.NAME, 'added_to_cart')
 
-        # User go to cart
-        self.browser.find_element(By.NAME, 'cart').click()
-        self.wait_for_check_current_url(reverse('carts:cart'))
+        # User goes to cart to check if chosen product is there
+        self.go_to_page_by_navbar('cart', reverse('carts:cart'))
+        cart_product_list = self.browser.find_element(By.ID, 'id_product_list').text
+        self.assertIn(product.name, cart_product_list)
 
-        # User check what his chosen product is here
-        self.assertIn(product.name, self.browser.find_element(By.TAG_NAME, 'h3').text)
-
-        # User click on make order and go to make order page
+        # User click on Make Order
         self.browser.find_element(By.NAME, 'make_order').click()
         self.wait_for_check_current_url(reverse('orders:make_order'))
 
@@ -89,7 +92,7 @@ class OrdersAndCartTest(FunctionalTest):
         phone.send_keys('+380505555555')
         phone.send_keys(Keys.ENTER)
 
-        # User click on finish order
+        # User click finish order
         self.browser.find_element(By.NAME, 'finish_order').click()
 
         # Site show message about success making order
