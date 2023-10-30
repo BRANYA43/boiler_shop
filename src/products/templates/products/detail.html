@@ -11,9 +11,13 @@
     <h3>{{ product.name }}</h3>
     <h3>{{ product.price }}</h3>
     {% if product.slug in request.session.cart.products %}
-        <a name="added_to_cart" href="#">Added to cart</a>
+        <button name="added_to_cart">Added to cart</button>
     {% else %}
-        <a name="buy" href="{% url 'carts:cart_add' product.slug %}">Buy</a>
+        <form method="post" action="{% url 'carts:cart_add' product.slug %}">
+            {% csrf_token %}
+            <input type="hidden" name="last_url" value="{{ request.get_full_path }}" >
+            <button name="buy" type="submit">Buy</button>
+        </form>
     {% endif %}
 </div>
 {% endblock %}

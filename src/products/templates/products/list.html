@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Product List{% endblock %}
 {% block content %}
-<div>
+<div id="id_product_list">
     {% for product in product_list %}
         <div class="card">
             <a name="image_link" href="{% url 'products:detail' product.slug %}">
@@ -15,9 +15,13 @@
             <a name="name_link" href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
             <h3>Price: {{ product.price }} UAH</h3>
                 {% if product.slug in request.session.cart.products %}
-                    <a name="added_to_cart" href="#">Added to cart</a>
+                    <button name="added_to_cart">Added to cart</button>
                 {% else %}
-                    <a name="buy" href="{% url 'carts:cart_add' product.slug %}">Buy</a>
+                    <form method="post" action="{% url 'carts:cart_add' product.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="last_url" value="{{ request.get_full_path }}" >
+                        <button name="buy" type="submit">Buy</button>
+                    </form>
                 {% endif %}
         </div>
     {% endfor %}
